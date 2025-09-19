@@ -126,8 +126,8 @@ def main_loop(spcNO,fileans,irun,datadir,sizeans,constMortans,mcruns,looptime,nt
 		egg_add = batchVars['egg_add'][ibatch]
 		
 		# PopVars Disease Pars
-		implementdisease = batchVars['implement_disease'][ibatch]		
-			
+		implementdisease = batchVars['implement_disease'][ibatch] if 'implement_disease' in batchVars.keys() else 'N'
+
 		# ------------------------------------------------------------
 		# Get nthfile, cdclimgen, alleles in correct format and checks
 		# ------------------------------------------------------------
