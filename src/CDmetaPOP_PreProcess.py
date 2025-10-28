@@ -1811,7 +1811,8 @@ def DoPreProcess(outdir,datadir,irun,ithmcrun,xyfilename,loci,alleles,gen,logfHn
 	# Create directory
 	# ----------------------------	
 	ithmcrundir = outdir+'run'+str(irun)+'batch'+str(ibatch)+'mc'+str(ithmcrun)+'species'+str(spcNO)+'/'
-	os.mkdir(ithmcrundir)
+	if not os.path.exists(ithmcrundir):
+		os.mkdir(ithmcrundir)
 	
 	# ------------------------------------------------------------------
 	# Read in xy points file and store info in list
@@ -1828,7 +1829,7 @@ def DoPreProcess(outdir,datadir,irun,ithmcrun,xyfilename,loci,alleles,gen,logfHn
 	if cdevolveans.split('_')[0] == 'P':
 		validate((len(xy[1]) - int(cdevolveans.split('_')[1].split('X')[1])) != xvars_indexspot, 'PatchVars input file must be ' + str(xvars_indexspot) + ' columns plus the specified number of variables operating in the multiple loci selection model; see example input files.')
 	else:
-		validate(len(xy[1]) != xvars_indexspot, 'PatchVars input file is not correct version when implementing multilocus selection or disease, see example input files.')		
+		validate(len(xy[1]) != xvars_indexspot, f"PatchVars input file has is not correct version when implementing multilocus selection or disease, see example input files. Expected {xvars_indexspot} columns, found {len(xy[1])} columns.")		
 					
 	# Store all information in lists by variable name from patchvars
 	Pop,xgridpop,ygridpop,PopTag,K_temp,Kstd_temp,N0_temp,natal_patches,migrate_patches,allefreqfiles_temp,classvarsfiles_temp = [],[],[],[],[],[],[],[],[],[],[]

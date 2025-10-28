@@ -95,10 +95,16 @@ def main_loop(spcNO,fileans,irun,datadir,sizeans,constMortans,mcruns,looptime,nt
 		betaFile_selection = batchVars['betaFile_selection'][ibatch]
 		
 		plasticans = batchVars['plasticgeneans'][ibatch]
-		plastic_signalresp_pass = batchVars['plasticSignalResponse'][ibatch]
-		plastic_behaviorresp_pass = batchVars['plasticBehavioralResponse'][ibatch]
-		burningen_plastic = int(batchVars['startPlasticgene'][ibatch])
-		timeplastic = batchVars['implementPlasticgene'][ibatch]
+		if plasticans != 'N':
+			plastic_signalresp_pass = batchVars['plasticSignalResponse'][ibatch]
+			plastic_behaviorresp_pass = batchVars['plasticBehavioralResponse'][ibatch]
+			burningen_plastic = int(batchVars['startPlasticgene'][ibatch])
+			timeplastic = batchVars['implementPlasticgene'][ibatch]
+		else:
+			plastic_signalresp_pass = 0
+			plastic_behaviorresp_pass = 0
+			burningen_plastic = int(0)
+			timeplastic = 0
 		
 		growans = batchVars['growth_option'][ibatch]
 		sizeLoo = batchVars['growth_Loo'][ibatch] # Check sex ratios
@@ -120,7 +126,7 @@ def main_loop(spcNO,fileans,irun,datadir,sizeans,constMortans,mcruns,looptime,nt
 		packans = batchVars['popmodel'][ibatch]
 		packpar1 = float(batchVars['popmodel_par1'][ibatch])
 		cor_mat_ans = batchVars['correlation_matrix'][ibatch]
-		defaultMature = batchVars['mature_default'][ibatch]
+		defaultMature = batchVars['mature_default'][ibatch] if 'mature_default' in batchVars.keys() else 'N'
 		subpopmort_pass = batchVars['subpopmort_file'][ibatch]
 		egg_delay = int(batchVars['egg_delay'][ibatch])
 		egg_add = batchVars['egg_add'][ibatch]
@@ -226,7 +232,8 @@ def main_loop(spcNO,fileans,irun,datadir,sizeans,constMortans,mcruns,looptime,nt
 		validate(not (inheritans_classfiles == 'random' or inheritans_classfiles == 'Hindex' or inheritans_classfiles == 'mother'),'Inherit answer for multiple class files is not correct: enter either random or Hindex.')
 				
 		# If inherit answer uses Hindex, mutation can't be on
-		if len(muterate_pass) > 1:
+		
+		if isinstance(muterate_pass, list):
 			validate(sum(np.asarray(muterate_pass,dtype=float)) != 0.0 and (inheritans_classfiles == 'Hindex' or inheritans_classfiles == 'mother'),'Mutation is not operating with Hindex inheritance options in this version.')
 		else:
 			validate(sum(np.asarray([muterate_pass],dtype=float)) != 0.0 and (inheritans_classfiles == 'Hindex' or inheritans_classfiles == 'mother'),'Mutation is not operating with Hindex inheritance options in this version.')

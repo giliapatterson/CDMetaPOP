@@ -486,7 +486,7 @@ def callDiffMortality(cdevolveans,gen,burningen_cdevolve,timecdevolve,OutorBack,
 
 
 # ---------------------------------------------------------------------------------------------------	
-def Do1LocusSelection(fitvals,genes,location,runtimingON):
+def Do1LocusSelection(fitvals,genes,location,runtimingON = False):
 	'''
 	Do1LocusSelection()
 	This function calculates individual differential mortality, ie,

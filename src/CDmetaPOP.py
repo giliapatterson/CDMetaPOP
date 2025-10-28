@@ -31,6 +31,7 @@ from multiprocessing import Process
 from multiprocessing import Queue
 import multiprocessing
 import numpy as np
+import argparse
 
 #Import the package specific folders
 CDPOP_folder = os.path.dirname(os.path.abspath(SRC_PATH+"CDmetaPOP"))
@@ -55,16 +56,20 @@ if __name__ == '__main__':
 	# Timing events: start
 	start_time = datetime.datetime.now()
 	foldertime = int(time.time())
-	
-	# Split PopVars len() assume noproc used
-	if len(sys.argv) == 4:
-		datadir = sys.argv[1]+'/'
-		fileans = datadir+sys.argv[2]
-		outdir = datadir+sys.argv[3]+str(foldertime)+'/'
+
+	parser = argparse.ArgumentParser()
+	parser.add_argument("-d", "--datadir", help = "Data directory")
+	parser.add_argument("-i", "--inputfilename", help = "Input file name")
+	parser.add_argument("-o", "--outputdir", default = "output_test" + str(foldertime), help = "Output file directory")
+	args = parser.parse_args()
 	
 	# If user did not specify .rip file
+	if args.datadir and args.inputfilename and args.outputdir:
+		datadir = args.datadir+'/'
+		fileans = datadir+args.inputfilename
+		outdir = datadir+args.outputdir + '/'
 	else:
-		print("User must specify data directory, input file name, and output file directory, e.g., at command line type CDmetaPOP.py ../CDmetaPOP_data/ RunVars.csv exampleout_foldername.")
+		print("User must specify data directory and input file name, e.g., at command line type CDmetaPOP.py -d ../CDmetaPOP_data/ -i RunVars.csv")
 		sys.exit(-1)	
 	
 	# If .ip file does not exist
@@ -73,7 +78,8 @@ if __name__ == '__main__':
 		sys.exit(-1)
 	
 	# Create output file directory - will automatically put in the data directory
-	os.mkdir(outdir)
+	if not os.path.exists(outdir):
+		os.mkdir(outdir)
 	current_system_pid = os.getpid() # Get parent ID for terminate
 		
 	# ------------------------------------	
